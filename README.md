@@ -38,7 +38,7 @@ INSERT INTO cadastro (nome, time) VALUES
 ('Kleber', 'Sport'),
 ('Khalel', 'Sport'),
 ('Thiago', 'Sport Recife');
-
+```
 
 ## Configuração do Projeto
 
