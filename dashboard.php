@@ -2,77 +2,82 @@
 session_start();
 
 // Verifica se o usuário está logado
-if (isset($_SESSION['logado']) && $_SESSION['logado'] == 1) {
-    // Conecte-se ao banco de dados
-    $conexao = mysqli_connect("localhost", "root", "", "torcedores");
-    
-    // Verifica se a conexão foi bem sucedida
-    if (mysqli_connect_errno()) {
-        echo "Falha ao conectar ao MySQL: " . mysqli_connect_error();
-        exit();
-    }
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] != 1) {
+    // O usuário não está logado, redireciona para a página de login
+    header("Location: index.php");
+    exit(); // Termina o script para garantir que a página não seja carregada se o usuário não estiver logado
+}
 
-    // Variáveis para controlar a exibição dos modais
-    $showEditModal = false;
-    $showDeleteModal = false;
-    $editId = $editNome = $editTime = $deleteId = "";
+// Conecte-se ao banco de dados
+$conexao = mysqli_connect("localhost", "root", "", "torcedores");
 
-    // Verifica se o formulário foi enviado
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['add'])) {
-            // Processa os dados do formulário para adicionar um novo torcedor
-            $nome = $_POST['nome'];
-            $time = $_POST['time'];
-            
-            // Insere os dados do novo torcedor na tabela
-            $query = "INSERT INTO cadastro (nome, time) VALUES ('$nome', '$time')";
-            $result = mysqli_query($conexao, $query);
-            
-            // Verifica se houve algum erro na inserção
-            if (!$result) {
-                echo "Erro ao inserir torcedor: " . mysqli_error($conexao);
-                exit();
-            }
-        } elseif (isset($_POST['edit'])) {
-            // Processa os dados do formulário para editar um torcedor existente
-            $id = $_POST['id_cadastro'];
-            $nome = $_POST['nome'];
-            $time = $_POST['time'];
-            
-            // Atualiza os dados do torcedor na tabela
-            $query = "UPDATE cadastro SET nome='$nome', time='$time' WHERE id_cadastro='$id'";
-            $result = mysqli_query($conexao, $query);
-            
-            // Verifica se houve algum erro na atualização
-            if (!$result) {
-                echo "Erro ao atualizar torcedor: " . mysqli_error($conexao);
-                exit();
-            }
-        } elseif (isset($_POST['delete'])) {
-            // Processa os dados do formulário para apagar um torcedor existente
-            $id = $_POST['id_cadastro'];
-            
-            // Deleta os dados do torcedor na tabela
-            $query = "DELETE FROM cadastro WHERE id_cadastro='$id'";
-            $result = mysqli_query($conexao, $query);
-            
-            // Verifica se houve algum erro na exclusão
-            if (!$result) {
-                echo "Erro ao apagar torcedor: " . mysqli_error($conexao);
-                exit();
-            }
-        } elseif (isset($_POST['showEditModal'])) {
-            // Exibe o modal de edição
-            $showEditModal = true;
-            $editId = $_POST['id_cadastro'];
-            $editNome = $_POST['nome'];
-            $editTime = $_POST['time'];
-        } elseif (isset($_POST['showDeleteModal'])) {
-            // Exibe o modal de exclusão
-            $showDeleteModal = true;
-            $deleteId = $_POST['id_cadastro'];
+// Verifica se a conexão foi bem sucedida
+if (mysqli_connect_errno()) {
+    echo "Falha ao conectar ao MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+// Variáveis para controlar a exibição dos modais
+$showEditModal = false;
+$showDeleteModal = false;
+$editId = $editNome = $editTime = $deleteId = "";
+
+// Verifica se o formulário foi enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['add'])) {
+        // Processa os dados do formulário para adicionar um novo torcedor
+        $nome = $_POST['nome'];
+        $time = $_POST['time'];
+        
+        // Insere os dados do novo torcedor na tabela
+        $query = "INSERT INTO cadastro (nome, time) VALUES ('$nome', '$time')";
+        $result = mysqli_query($conexao, $query);
+        
+        // Verifica se houve algum erro na inserção
+        if (!$result) {
+            echo "Erro ao inserir torcedor: " . mysqli_error($conexao);
+            exit();
         }
+    } elseif (isset($_POST['edit'])) {
+        // Processa os dados do formulário para editar um torcedor existente
+        $id = $_POST['id_cadastro'];
+        $nome = $_POST['nome'];
+        $time = $_POST['time'];
+        
+        // Atualiza os dados do torcedor na tabela
+        $query = "UPDATE cadastro SET nome='$nome', time='$time' WHERE id_cadastro='$id'";
+        $result = mysqli_query($conexao, $query);
+        
+        // Verifica se houve algum erro na atualização
+        if (!$result) {
+            echo "Erro ao atualizar torcedor: " . mysqli_error($conexao);
+            exit();
+        }
+    } elseif (isset($_POST['delete'])) {
+        // Processa os dados do formulário para apagar um torcedor existente
+        $id = $_POST['id_cadastro'];
+        
+        // Deleta os dados do torcedor na tabela
+        $query = "DELETE FROM cadastro WHERE id_cadastro='$id'";
+        $result = mysqli_query($conexao, $query);
+        
+        // Verifica se houve algum erro na exclusão
+        if (!$result) {
+            echo "Erro ao apagar torcedor: " . mysqli_error($conexao);
+            exit();
+        }
+    } elseif (isset($_POST['showEditModal'])) {
+        // Exibe o modal de edição
+        $showEditModal = true;
+        $editId = $_POST['id_cadastro'];
+        $editNome = $_POST['nome'];
+        $editTime = $_POST['time'];
+    } elseif (isset($_POST['showDeleteModal'])) {
+        // Exibe o modal de exclusão
+        $showDeleteModal = true;
+        $deleteId = $_POST['id_cadastro'];
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +146,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] == 1) {
                                 <input type='hidden' name='time' value='" . $row['time'] . "'>
                                 <button type='submit' name='showEditModal'>
                                     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='16' height='16'>
-                                        <path d='M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z'/>
+                                        <path d='M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4 6.2 22.6 0s6.2 16.4 0 22.6z'/>
                                     </svg>
                                     Modificar
                                 </button>
@@ -205,11 +210,3 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] == 1) {
 
 </body>
 </html>
-
-<?php
-} else {
-    // O usuário não está logado, redireciona para a página de login
-    header("Location: index.php");
-    exit(); // Termina o script para garantir que a página não seja carregada se o usuário não estiver logado
-}
-?>
