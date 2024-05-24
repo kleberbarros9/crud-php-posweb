@@ -49,8 +49,9 @@ Inicie o servidor Apache e MySQL através do painel de controle do XAMPP.
 
 Abra o navegador e acesse o URL: http://localhost/crud-final
 Use as credenciais padrão para login:
-Login: admin
-Senha: admin
+
+- Login: admin
+- Senha: admin
 
 ![tela de login](img/login.png)
 
