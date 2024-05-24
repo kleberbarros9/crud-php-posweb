@@ -45,7 +45,7 @@ INSERT INTO cadastro (nome, time) VALUES
 Baixe ou clone este projeto para a pasta htdocs do XAMPP. O caminho completo deve ser C:\xampp\htdocs\crud-final.
 Inicie o servidor Apache e MySQL através do painel de controle do XAMPP.
 
-##Acesso ao Sistema
+## Acesso ao Sistema
 
 Abra o navegador e acesse o URL: http://localhost/crud-final
 Use as credenciais padrão para login:
@@ -55,7 +55,7 @@ Senha: admin
 ![tela de login](img/login.png)
 
 
-##Funcionalidades
+## Funcionalidades
 
 Após o login, você será redirecionado para a rota http://localhost/crud-final/dashboard.php, onde você pode gerenciar os dados da tabela cadastro. As funcionalidades incluem:
 
