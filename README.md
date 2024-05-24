@@ -66,7 +66,7 @@ Após o login, você será redirecionado para a rota http://localhost/crud-final
 ![modificando torcedores](img/modify.png)
 
 - Excluir torcedores existentes
-![deletando delete](img/login.png)
+![deletando delete](img/delete.png)
 
 Todas as alterações são persistidas no banco de dados e podem ser acessadas via http://localhost/phpmyadmin.
 
