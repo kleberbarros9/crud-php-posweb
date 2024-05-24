@@ -1,0 +1,31 @@
+/* Estilos para a tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dddddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+/* Estilo para o cabeçalho da tabela */
+th {
+    background-color: #e0eafc; /* Azul claro */
+    font-weight: bold;
+}
+
+/* Estilos para linhas alternadas */
+tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+/* Estilo para destacar a linha quando o mouse passa por cima */
+tbody tr:hover {
+    background-color: #dddddd;
+}
