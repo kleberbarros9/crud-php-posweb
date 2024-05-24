@@ -1,4 +1,4 @@
-# CRUD Final Project
+# PHP CRUD Project
 
 ## Descrição
 Este projeto PHP é um sistema CRUD simples para gerenciar torcedores. Para que o projeto funcione corretamente, é necessário configurar um esquema MySQL conforme descrito abaixo.
